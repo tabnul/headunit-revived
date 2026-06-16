@@ -71,6 +71,16 @@ class Settings(private val context: Context) {
         get() = prefs.getBoolean("stretch_to_fill", true)
         set(value) { prefs.edit().putBoolean("stretch_to_fill", value).apply() }
 
+    // When true, the Android Auto projection opens on whichever display the app UI
+    // is currently on (e.g. an external/desktop screen), by launching it from the
+    // foreground activity so it inherits that activity's display, and by negotiating
+    // the head-unit DPI against that same display. No privileged display targeting is
+    // used. NOTE: this only places the projection where the app already is — open the
+    // app on the desired screen first (cold-start it there if needed).
+    var projectionFollowsAppDisplay: Boolean
+        get() = prefs.getBoolean("projection_follows_app_display", false)
+        set(value) { prefs.edit().putBoolean("projection_follows_app_display", value).apply() }
+
     // Forced scale for older devices (SurfaceView fix)
     var forcedScale: Boolean
         get() = prefs.getBoolean("forced_scale", false)
@@ -392,7 +402,7 @@ class Settings(private val context: Context) {
     var audioLatencyMultiplier: Int
         get() = prefs.getInt("audio-latency-multiplier", 8)
         set(value) { prefs.edit().putInt("audio-latency-multiplier", value).apply() }
-    
+
     var audioQueueCapacity: Int
         get() = prefs.getInt("audio-queue-capacity", 0)
         set(value) { prefs.edit().putInt("audio-queue-capacity", value).apply() }
@@ -440,7 +450,7 @@ class Settings(private val context: Context) {
     var autoStartWifiSsid: String
         get() = prefs.getString("auto-start-wifi-ssid", "")!!
         set(value) { prefs.edit().putString("auto-start-wifi-ssid", value).apply() }
-        
+
     var listenForUsbDevices: Boolean
         get() = prefs.getBoolean("listen-for-usb-devices", true)
         set(value) { prefs.edit().putBoolean("listen-for-usb-devices", value).apply() }
@@ -785,7 +795,7 @@ class Settings(private val context: Context) {
                     .apply()
             }
         }
-        
+
         fun isListenForUsbDevicesEnabled(context: Context): Boolean {
             val prefs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val deviceContext = context.createDeviceProtectedStorageContext()

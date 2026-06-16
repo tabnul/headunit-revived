@@ -21,8 +21,17 @@ class ServiceDiscoveryResponse(private val context: Context)
         private fun makeProto(context: Context): Message {
             val settings = App.provide(context).settings
 
-            // Initialize HeadUnitScreenConfig with actual physical screen dimensions
-            HeadUnitScreenConfig.init(context, context.resources.displayMetrics, settings)
+            // Initialize HeadUnitScreenConfig with the physical screen dimensions.
+            // When the projection follows the app's display, negotiate against the
+            // foreground activity's display metrics so the DPI/resolution sent to
+            // Android Auto matches the screen it will render on. Otherwise the
+            // service context's (built-in display) density is used, which is what
+            // made the DPI look inconsistent across sessions.
+            val displayMetrics = if (settings.projectionFollowsAppDisplay)
+                (com.andrerinas.headunitrevived.main.MainActivity.instance?.resources?.displayMetrics
+                    ?: context.resources.displayMetrics)
+            else context.resources.displayMetrics
+            HeadUnitScreenConfig.init(context, displayMetrics, settings)
 
             val services = mutableListOf<Control.Service>()
 
@@ -33,11 +42,11 @@ class ServiceDiscoveryResponse(private val context: Context)
                     if (settings.useGpsForNavigation) {
                         sources.addSensors(makeSensorType(Sensors.SensorType.LOCATION))
                     }
-                    
+
                     // Always announce Night sensor, as we control it via NightModeManager
                     sources.addSensors(makeSensorType(Sensors.SensorType.NIGHT))
                     AppLog.i("[ServiceDiscovery] Announcing NIGHT sensor support. Strategy: ${settings.nightMode}")
-                    
+
                 }.build()
             }.build()
 
@@ -53,7 +62,7 @@ class ServiceDiscoveryResponse(private val context: Context)
                             Media.MediaCodecType.MEDIA_CODEC_VIDEO_H264_BP
                         }
                         "Auto" -> {
-                            // Only use H.265 in Auto mode for 4K or if explicitly needed, 
+                            // Only use H.265 in Auto mode for 4K or if explicitly needed,
                             // otherwise prefer stable H.264
                             val negotiatedResolution = HeadUnitScreenConfig.negotiatedResolutionType
                             if (negotiatedResolution == Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._3840x2160 &&
@@ -73,7 +82,7 @@ class ServiceDiscoveryResponse(private val context: Context)
 
                     // Enforce H.265 for 1440p resolution as required by Android Auto, but ONLY if hardware supports it
                     val effectiveCodec = if ((negotiatedResolution == Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._2560x1440 ||
-                        negotiatedResolution == Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1440x2560) &&
+                            negotiatedResolution == Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1440x2560) &&
                         com.andrerinas.headunitrevived.decoder.VideoDecoder.isHevcReliable()) {
                         AppLog.i("Resolution is 1440p -> Enforcing H.265 codec")
                         Media.MediaCodecType.MEDIA_CODEC_VIDEO_H265
@@ -111,7 +120,7 @@ class ServiceDiscoveryResponse(private val context: Context)
                         setWidth(HeadUnitScreenConfig.getNegotiatedWidth()) // Use negotiated width
                         setHeight(HeadUnitScreenConfig.getNegotiatedHeight()) // Use negotiated height
                     }.build()
-                    
+
                     if (settings.enableRotary) {
                         AppLog.i("[ServiceDiscovery] Announcing Rotary/Touchpad support")
                         it.touchpad = Control.Service.InputSourceService.TouchConfig.newBuilder().apply {
@@ -119,7 +128,7 @@ class ServiceDiscoveryResponse(private val context: Context)
                             setHeight(HeadUnitScreenConfig.getNegotiatedHeight())
                         }.build()
                     }
-                    
+
                     it.addAllKeycodesSupported(KeyCode.supported)
                 }.build()
             }.build()
@@ -186,8 +195,8 @@ class ServiceDiscoveryResponse(private val context: Context)
                     service.bluetoothService = Control.Service.BluetoothService.newBuilder().also {
                         it.carAddress = settings.bluetoothAddress
                         it.addAllSupportedPairingMethods(
-                                listOf(Control.BluetoothPairingMethod.A2DP,
-                                        Control.BluetoothPairingMethod.HFP)
+                            listOf(Control.BluetoothPairingMethod.A2DP,
+                                Control.BluetoothPairingMethod.HFP)
                         )
                     }.build()
                 }.build()
@@ -243,7 +252,7 @@ class ServiceDiscoveryResponse(private val context: Context)
 
         private fun makeSensorType(type: Sensors.SensorType): Control.Service.SensorSourceService.Sensor {
             return Control.Service.SensorSourceService.Sensor.newBuilder()
-                    .setType(type).build()
+                .setType(type).build()
         }
     }
 }

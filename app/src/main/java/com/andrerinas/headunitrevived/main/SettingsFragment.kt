@@ -435,67 +435,67 @@ class SettingsFragment : Fragment() {
     private fun checkChanges() {
         // Check for any changes
         val anyChange = pendingUseGps != settings.useGpsForNavigation ||
-                        pendingShowNavigationNotifications != settings.showNavigationNotifications ||
-                        pendingSyncMediaSessionAaMetadata != settings.syncMediaSessionWithAaMetadata ||
-                        pendingResolution != settings.resolutionId ||
-                        pendingDpi != settings.dpiPixelDensity ||
-                        pendingFullscreenMode != settings.fullscreenMode ||
-                        pendingViewMode != settings.viewMode ||
-                        pendingForceSoftware != settings.forceSoftwareDecoding ||
-                        pendingVideoCodec != settings.videoCodec ||
-                        pendingFpsLimit != settings.fpsLimit ||
-                        pendingBluetoothAddress != settings.bluetoothAddress ||
-                        pendingEnableAudioSink != settings.enableAudioSink ||
-                        pendingStaticAudioFocus != settings.staticAudioFocus ||
-                        pendingSeparateAudioStreams != settings.separateAudioStreams ||
-                        pendingUseAacAudio != settings.useAacAudio ||
-                        pendingMicInputSource != settings.micInputSource ||
-                        pendingEnableRotary != settings.enableRotary ||
-                        pendingAudioLatencyMultiplier != settings.audioLatencyMultiplier ||
-                        pendingAudioQueueCapacity != settings.audioQueueCapacity ||
-                        pendingShowFpsCounter != settings.showFpsCounter ||
-                        pendingScreenOrientation != settings.screenOrientation ||
-                        pendingAppLanguage != settings.appLanguage ||
-                        pendingStretchToFill != settings.stretchToFill ||
-                        pendingForcedScale != settings.forcedScale ||
-                        pendingInsetLeft != settings.insetLeft ||
-                        pendingInsetTop != settings.insetTop ||
-                        pendingInsetRight != settings.insetRight ||
-                        pendingInsetBottom != settings.insetBottom ||
-                        pendingMediaVolumeOffset != settings.mediaVolumeOffset ||
-                        pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
-                        pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
-                        pendingKillOnDisconnect != settings.killOnDisconnect ||
-                        pendingAutoEnableHotspot != settings.autoEnableHotspot ||
-                        pendingFakeSpeed != settings.fakeSpeed ||
-                        pendingWifiConnectionMode != settings.wifiConnectionMode ||
-                        pendingHelperConnectionStrategy != settings.helperConnectionStrategy ||
-                        pendingWaitForWifi != settings.waitForWifiBeforeWifiDirect ||
-                        pendingWaitForWifiTimeout != settings.waitForWifiTimeout ||
-                        pendingUseNativeSsl != settings.useNativeSsl ||
-                        pendingBluetoothManagerServiceName != settings.bluetoothManagerServiceName
+            pendingShowNavigationNotifications != settings.showNavigationNotifications ||
+            pendingSyncMediaSessionAaMetadata != settings.syncMediaSessionWithAaMetadata ||
+            pendingResolution != settings.resolutionId ||
+            pendingDpi != settings.dpiPixelDensity ||
+            pendingFullscreenMode != settings.fullscreenMode ||
+            pendingViewMode != settings.viewMode ||
+            pendingForceSoftware != settings.forceSoftwareDecoding ||
+            pendingVideoCodec != settings.videoCodec ||
+            pendingFpsLimit != settings.fpsLimit ||
+            pendingBluetoothAddress != settings.bluetoothAddress ||
+            pendingEnableAudioSink != settings.enableAudioSink ||
+            pendingStaticAudioFocus != settings.staticAudioFocus ||
+            pendingSeparateAudioStreams != settings.separateAudioStreams ||
+            pendingUseAacAudio != settings.useAacAudio ||
+            pendingMicInputSource != settings.micInputSource ||
+            pendingEnableRotary != settings.enableRotary ||
+            pendingAudioLatencyMultiplier != settings.audioLatencyMultiplier ||
+            pendingAudioQueueCapacity != settings.audioQueueCapacity ||
+            pendingShowFpsCounter != settings.showFpsCounter ||
+            pendingScreenOrientation != settings.screenOrientation ||
+            pendingAppLanguage != settings.appLanguage ||
+            pendingStretchToFill != settings.stretchToFill ||
+            pendingForcedScale != settings.forcedScale ||
+            pendingInsetLeft != settings.insetLeft ||
+            pendingInsetTop != settings.insetTop ||
+            pendingInsetRight != settings.insetRight ||
+            pendingInsetBottom != settings.insetBottom ||
+            pendingMediaVolumeOffset != settings.mediaVolumeOffset ||
+            pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
+            pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
+            pendingKillOnDisconnect != settings.killOnDisconnect ||
+            pendingAutoEnableHotspot != settings.autoEnableHotspot ||
+            pendingFakeSpeed != settings.fakeSpeed ||
+            pendingWifiConnectionMode != settings.wifiConnectionMode ||
+            pendingHelperConnectionStrategy != settings.helperConnectionStrategy ||
+            pendingWaitForWifi != settings.waitForWifiBeforeWifiDirect ||
+            pendingWaitForWifiTimeout != settings.waitForWifiTimeout ||
+            pendingUseNativeSsl != settings.useNativeSsl ||
+            pendingBluetoothManagerServiceName != settings.bluetoothManagerServiceName
 
         hasChanges = anyChange
 
         // Check for restart requirement
         requiresRestart = pendingResolution != settings.resolutionId ||
-                          pendingVideoCodec != settings.videoCodec ||
-                          pendingFpsLimit != settings.fpsLimit ||
-                          pendingDpi != settings.dpiPixelDensity ||
-                          pendingForceSoftware != settings.forceSoftwareDecoding ||
-                          pendingEnableRotary != settings.enableRotary ||
-                          pendingEnableAudioSink != settings.enableAudioSink ||
-                          pendingStaticAudioFocus != settings.staticAudioFocus ||
-                          pendingSeparateAudioStreams != settings.separateAudioStreams ||
-                          pendingUseAacAudio != settings.useAacAudio ||
-                          pendingUseNativeSsl != settings.useNativeSsl ||
-                          pendingAudioLatencyMultiplier != settings.audioLatencyMultiplier ||
-                          pendingAudioQueueCapacity != settings.audioQueueCapacity ||
-                          pendingInsetLeft != settings.insetLeft ||
-                          pendingInsetTop != settings.insetTop ||
-                          pendingInsetRight != settings.insetRight ||
-                          pendingInsetBottom != settings.insetBottom ||
-                          pendingWifiConnectionMode != settings.wifiConnectionMode
+            pendingVideoCodec != settings.videoCodec ||
+            pendingFpsLimit != settings.fpsLimit ||
+            pendingDpi != settings.dpiPixelDensity ||
+            pendingForceSoftware != settings.forceSoftwareDecoding ||
+            pendingEnableRotary != settings.enableRotary ||
+            pendingEnableAudioSink != settings.enableAudioSink ||
+            pendingStaticAudioFocus != settings.staticAudioFocus ||
+            pendingSeparateAudioStreams != settings.separateAudioStreams ||
+            pendingUseAacAudio != settings.useAacAudio ||
+            pendingUseNativeSsl != settings.useNativeSsl ||
+            pendingAudioLatencyMultiplier != settings.audioLatencyMultiplier ||
+            pendingAudioQueueCapacity != settings.audioQueueCapacity ||
+            pendingInsetLeft != settings.insetLeft ||
+            pendingInsetTop != settings.insetTop ||
+            pendingInsetRight != settings.insetRight ||
+            pendingInsetBottom != settings.insetBottom ||
+            pendingWifiConnectionMode != settings.wifiConnectionMode
 
         updateSaveButtonState()
     }
@@ -576,6 +576,18 @@ class SettingsFragment : Fragment() {
             value = "${getString(R.string.ui_scale_home)}: ${pendingUiScaleHomePercent ?: 100}% · ${getString(R.string.ui_scale_settings)}: ${pendingUiScaleSettingsPercent ?: 100}%",
             onClick = { _ ->
                 showUiScaleDialog()
+            }
+        ))
+
+        // Open the projection on whichever screen the app is on (written immediately).
+        items.add(SettingItem.ToggleSettingEntry(
+            stableId = "projectionFollowsAppDisplay",
+            nameResId = R.string.projection_follows_app_display,
+            descriptionResId = R.string.projection_follows_app_display_description,
+            isChecked = settings.projectionFollowsAppDisplay,
+            onCheckedChanged = { isChecked ->
+                settings.projectionFollowsAppDisplay = isChecked
+                updateSettingsList()
             }
         ))
 
@@ -747,7 +759,7 @@ class SettingsFragment : Fragment() {
         val appThemeTitles = resources.getStringArray(R.array.app_theme)
         val nightModeTitles = resources.getStringArray(R.array.night_mode)
         val darkModeValue = "${getString(R.string.app_theme_short)}: ${appThemeTitles[settings.appTheme.value]} · " +
-                "${getString(R.string.night_mode_short)}: ${nightModeTitles[settings.nightMode.value]}"
+            "${getString(R.string.night_mode_short)}: ${nightModeTitles[settings.nightMode.value]}"
         items.add(SettingItem.SettingEntry(
             stableId = "darkModeSettings",
             nameResId = R.string.dark_mode_settings,
@@ -1244,7 +1256,7 @@ class SettingsFragment : Fragment() {
                         dialog.dismiss()
                         updateSettingsList()
                     }
-                .show()
+                    .show()
             }
         ))
 

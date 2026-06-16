@@ -583,4 +583,6 @@
     <string name="hotspot_qr_description">Wireless Helper Configuration QR Code</string>
     <string name="scan_with_wireless_helper">Scan this QR Code using the QR Scanner in Wireless Helper on your phone.</string>
     <string name="share_hotspot_qr_error">Could not retrieve active Wi-Fi hotspot credentials. Please ensure your hotspot is turned on and Location is enabled.</string>
+    <string name="projection_follows_app_display">Open projection on the app\'s screen</string>
+    <string name="projection_follows_app_display_description">Launches the projection on whichever screen the app is currently on, instead of the built-in screen, and matches the DPI to it. Open the app on your external/desktop display first (if it opens on the phone, close it from Recents and reopen it on the desktop).</string>
 </resources>

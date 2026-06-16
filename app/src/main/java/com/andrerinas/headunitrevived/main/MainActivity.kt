@@ -130,7 +130,7 @@ class MainActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
             startActivity(aapIntent)
-            
+
             // If we are auto-forwarding, hide the splash immediately to avoid flashing it twice
             if (savedInstanceState == null) {
                 findViewById<View>(R.id.splash_overlay)?.visibility = View.GONE
@@ -193,7 +193,7 @@ class MainActivity : BaseActivity() {
             val elapsedSinceStart = SystemClock.elapsedRealtime() - App.appStartTime
             val targetTotalDuration = 1200L
             val actualDelay = (targetTotalDuration - elapsedSinceStart).coerceAtLeast(0L)
-            
+
             showSplashWithDelay(actualDelay)
         } else {
             findViewById<View>(R.id.splash_overlay)?.visibility = View.GONE
@@ -263,8 +263,8 @@ class MainActivity : BaseActivity() {
         // launch and ignored until the 30 s watchdog kicks in.
         val currentState = commManager.connectionState.value
         hasAdvancedToActiveState = currentState is CommManager.ConnectionState.Connecting ||
-                currentState is CommManager.ConnectionState.Connected ||
-                currentState is CommManager.ConnectionState.StartingTransport
+            currentState is CommManager.ConnectionState.Connected ||
+            currentState is CommManager.ConnectionState.StartingTransport
         autoConnectStatusText = customStatusText
         // Hand the status text off to AapProjectionActivity so its own loading
         // screen continues to show the same context-specific label after the
@@ -702,7 +702,7 @@ class MainActivity : BaseActivity() {
         } else null
 
         val isLauncherTap = intent?.action == Intent.ACTION_MAIN &&
-                intent.hasCategory(Intent.CATEGORY_LAUNCHER)
+            intent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
         if (isLauncherTap) {
             AppLog.i("App launched by user tap (referrer: ${referrer ?: "none"})")
@@ -729,8 +729,8 @@ class MainActivity : BaseActivity() {
             return
         }
 
-        if (intentAction == AapService.ACTION_START_SELF_MODE || 
-           (intentData?.scheme == "headunit" && intentData.host == "selfmode")) {
+        if (intentAction == AapService.ACTION_START_SELF_MODE ||
+            (intentData?.scheme == "headunit" && intentData.host == "selfmode")) {
             AppLog.i("MainActivity: Forced self-mode start requested")
             HomeFragment.forceSelfModeLaunch = true
             val selfModeIntent = Intent(this, AapService::class.java).apply {
@@ -815,6 +815,7 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        instance = this
         setFullscreen()
 
         checkSetupFlow()
@@ -831,6 +832,18 @@ class MainActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
             startActivity(aapIntent)
+        }
+    }
+
+    /**
+     * Launches the projection from this activity's context so it inherits this
+     * activity's display. Called by the service instead of launching from its own
+     * (display-less) context, so the projection follows the app's screen.
+     */
+    fun launchProjectionFromHere(intent: Intent) {
+        runOnUiThread {
+            try { startActivity(intent) }
+            catch (e: Exception) { AppLog.e("MainActivity: projection launch failed: ${e.message}") }
         }
     }
 
@@ -863,19 +876,20 @@ class MainActivity : BaseActivity() {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         AppLog.i("dispatchKeyEvent: keyCode=%d, action=%d", event.keyCode, event.action)
-        
+
         // Always give the KeymapFragment (if active) a chance to see the key
         val handled = keyListener?.onKeyEvent(event) ?: false
-        
+
         // If the key was handled by our listener (e.g. in KeymapFragment), stop here
         if (handled) return true
-        
+
         // Otherwise continue with standard handling
         return super.dispatchKeyEvent(event)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if (instance === this) instance = null
         if (isFinishReceiverRegistered) {
             unregisterReceiver(finishReceiver)
             isFinishReceiverRegistered = false
@@ -936,5 +950,12 @@ class MainActivity : BaseActivity() {
         @Volatile var hasAdvancedToActiveState: Boolean = false
 
         const val ACTION_RECREATE_MAIN = "com.andrerinas.headunitrevived.ACTION_RECREATE_MAIN"
+
+        /**
+         * Reference to the most-recently-resumed MainActivity. The service uses it to
+         * launch the projection from this activity's context, so the projection inherits
+         * whatever display the app is currently on (the normal, unprivileged path).
+         */
+        @Volatile var instance: MainActivity? = null
     }
 }
